@@ -1,0 +1,16 @@
+name: Build and verify
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compiler version
+        run: cc --version
+      - name: Build and check
+        run: |
+          make
+          cc -static -O2 -Wall -Wextra -Werror examples/probe.c -o probe
+          file sandbox probe
